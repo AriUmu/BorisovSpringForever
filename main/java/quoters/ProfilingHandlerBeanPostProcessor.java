@@ -1,9 +1,7 @@
 package quoters;
 
-import com.sun.media.jfxmediaimpl.platform.PlatformManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.lang.Nullable;
 
 import javax.management.*;
 import java.lang.management.ManagementFactory;
@@ -13,14 +11,14 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfilingHeandlerBeanPostProcessor implements BeanPostProcessor {
+public class ProfilingHandlerBeanPostProcessor implements BeanPostProcessor {
     private ProfilingController controller = new ProfilingController();
     private Map<String, Class> map = new HashMap<>();
 
-    public ProfilingHeandlerBeanPostProcessor() {
+    public ProfilingHandlerBeanPostProcessor() {
         MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
         try {
-            platformMBeanServer.registerMBean(controller, new ObjectName("profiling","name", "controller"));
+            platformMBeanServer.registerMBean(controller,new ObjectName("profiling", "name", "controller"));
         } catch (InstanceAlreadyExistsException e) {
             e.printStackTrace();
         } catch (MBeanRegistrationException e) {
@@ -33,7 +31,7 @@ public class ProfilingHeandlerBeanPostProcessor implements BeanPostProcessor {
     }
 
 
-    @Nullable
+    @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Class<?> aClass = bean.getClass();
         if(aClass.isAnnotationPresent(Profiling.class)){
@@ -42,24 +40,24 @@ public class ProfilingHeandlerBeanPostProcessor implements BeanPostProcessor {
         return bean;
     }
 
-    @Nullable
-    public Object postProcessAfterInitialization(final Object bean, String beanName) throws BeansException {
-
-        Class aClass = map.get(beanName);
-        if(aClass != null){
-            return Proxy.newProxyInstance(aClass.getClassLoader(), aClass.getInterfaces(), new InvocationHandler() {
+    @Override
+    public Object postProcessAfterInitialization(final Object bean, final String beanName) throws BeansException {
+        Class beanClass = map.get(beanName);
+        if (beanClass != null) {
+            return Proxy.newProxyInstance(beanClass.getClassLoader(), beanClass.getInterfaces(), new InvocationHandler() {
+                @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                   if(controller.getEnabled()) {
-                       long before = System.nanoTime();
-                       System.out.println("Profiling");
-                       Object invoke = method.invoke(bean, args);
-                       long after = System.nanoTime();
-                       System.out.println(after - before);
-                       System.out.println("End");
-                       return invoke;
-                   } else {
-                       return  method.invoke(bean, args);
-                   }
+                    if (controller.isEnabled()) {
+                        System.out.println("Profiling...");
+                        long before = System.nanoTime();
+                        Object retVal = method.invoke(bean, args);
+                        long after = System.nanoTime();
+                        System.out.println(after - before);
+                        System.out.println("That's all!");
+                        return retVal;
+                    } else {
+                        return method.invoke(bean,args);
+                    }
                 }
             });
         }

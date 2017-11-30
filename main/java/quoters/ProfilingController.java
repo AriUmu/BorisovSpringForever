@@ -2,9 +2,9 @@ package quoters;
 
 public class ProfilingController implements ProfilingControllerBean{
 
-    private boolean enabled;
+    private boolean enabled = true;
 
-    public boolean getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 

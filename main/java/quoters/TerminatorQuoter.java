@@ -1,7 +1,5 @@
 package quoters;
 
-import org.springframework.context.annotation.Profile;
-
 import javax.annotation.PostConstruct;
 
 @Profiling
@@ -9,6 +7,11 @@ public class TerminatorQuoter implements Quoter {
 
     @InjectRandomInt(min = 2, max = 7)
     private int repeat;
+
+    public void setRepeat(int repeat) {
+        this.repeat = repeat;
+    }
+
     private String message;
 
     @PostConstruct
@@ -24,6 +27,7 @@ public class TerminatorQuoter implements Quoter {
         System.out.println("Phase 1");
     }
 
+    @PostProxy
     public void sayQuoter() {
 
         for (int i = 0; i < repeat; i++) {
