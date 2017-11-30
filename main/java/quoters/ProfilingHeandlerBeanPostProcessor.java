@@ -1,9 +1,12 @@
 package quoters;
 
+import com.sun.media.jfxmediaimpl.platform.PlatformManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.lang.Nullable;
 
+import javax.management.*;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -11,11 +14,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfilingHeandlerBeanPostProcessor implements BeanPostProcessor {
-
-
     private ProfilingController controller = new ProfilingController();
+    private Map<String, Class> map = new HashMap<>();
 
-    private Map<String, Class> map = new HashMap<String, Class>();
+    public ProfilingHeandlerBeanPostProcessor() {
+        MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
+        try {
+            platformMBeanServer.registerMBean(controller, new ObjectName("profiling","name", "controller"));
+        } catch (InstanceAlreadyExistsException e) {
+            e.printStackTrace();
+        } catch (MBeanRegistrationException e) {
+            e.printStackTrace();
+        } catch (NotCompliantMBeanException e) {
+            e.printStackTrace();
+        } catch (MalformedObjectNameException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Nullable
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Class<?> aClass = bean.getClass();
