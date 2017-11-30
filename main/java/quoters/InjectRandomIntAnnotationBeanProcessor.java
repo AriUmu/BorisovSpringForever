@@ -18,9 +18,9 @@ public class InjectRandomIntAnnotationBeanProcessor implements BeanPostProcessor
     @Nullable
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Field[] fields = bean.getClass().getDeclaredFields();
-        for (Field field : fields){
+        for (Field field : fields) {
             InjectRandomInt annotation = field.getAnnotation(InjectRandomInt.class);
-            if(annotation != null){
+            if (annotation != null) {
                 int min = annotation.min();
                 int max = annotation.max();
                 Random random = new Random();
@@ -30,6 +30,6 @@ public class InjectRandomIntAnnotationBeanProcessor implements BeanPostProcessor
             }
 
         }
-            return bean;
+        return bean;
     }
 }
