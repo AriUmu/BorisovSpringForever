@@ -1,7 +1,10 @@
 package quoters;
 
+import org.springframework.context.annotation.Profile;
+
 import javax.annotation.PostConstruct;
 
+@Profiling
 public class TerminatorQuoter implements Quoter {
 
     @InjectRandomInt(min = 2, max = 7)
