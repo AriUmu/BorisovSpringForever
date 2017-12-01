@@ -9,7 +9,7 @@ import java.util.Random;
 @ComponentScan(basePackages = "screensaver")
 public class Config {
     @Bean
-    @Scope("prototype")
+    @Scope("periodical")
     public Color color(){
         Random random = new Random();
         return new Color(random.nextInt(255),random.nextInt(255),random.nextInt(255));
@@ -28,10 +28,10 @@ public class Config {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
-        while (true){
+        while (true) {
             context.getBean(ColorFrame.class).showOnRandomPlace();
             try {
-                Thread.sleep(400);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
