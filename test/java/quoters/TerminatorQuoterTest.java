@@ -10,9 +10,10 @@ public class TerminatorQuoterTest {
 
     @Test
     public void testConfig() throws InterruptedException {
-        while (true) {
-            Thread.sleep(500);
-            context.getBean(Quoter.class).sayQuoter();
-        }
+        context.getBean(Quoter.class).sayQuoter();
+//        while (true) {
+//            Thread.sleep(500);
+//            context.getBean(Quoter.class).sayQuoter();
+//        }
     }
 }

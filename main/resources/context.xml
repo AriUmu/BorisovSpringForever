@@ -6,6 +6,7 @@
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <context:annotation-config/>
    <!--<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"></bean>-->
+   <bean class="quoters.DeperecationHandlerBeanFactoryPastProcessor"></bean>
     <bean class="quoters.PostProxyInvokerContextListener"></bean>
     <bean class="quoters.ProfilingHandlerBeanPostProcessor"/>
     <bean class="quoters.InjectRandomIntAnnotationBeanProcessor"/>

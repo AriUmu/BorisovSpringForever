@@ -18,14 +18,8 @@ public class ProfilingHandlerBeanPostProcessor implements BeanPostProcessor {
     public ProfilingHandlerBeanPostProcessor() {
         MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
         try {
-            platformMBeanServer.registerMBean(controller,new ObjectName("profiling", "name", "controller"));
-        } catch (InstanceAlreadyExistsException e) {
-            e.printStackTrace();
-        } catch (MBeanRegistrationException e) {
-            e.printStackTrace();
-        } catch (NotCompliantMBeanException e) {
-            e.printStackTrace();
-        } catch (MalformedObjectNameException e) {
+            platformMBeanServer.registerMBean(controller, new ObjectName("profiling", "name", "controller"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -53,7 +47,7 @@ public class ProfilingHandlerBeanPostProcessor implements BeanPostProcessor {
                         Object retVal = method.invoke(bean, args);
                         long after = System.nanoTime();
                         System.out.println(after - before);
-                        System.out.println("That's all!");
+                        System.out.println("Все хватит!");
                         return retVal;
                     } else {
                         return method.invoke(bean,args);
